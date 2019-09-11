@@ -494,15 +494,19 @@ def doBuildMacOsCatalyst(String buildType) {
 
             dir("build-maccatalyst-${buildType}") {
                 withEnv(['DEVELOPER_DIR=/Applications/Xcode-11.app/Contents/Developer/']) {
-                    sh """
-                            rm -rf *
-                            cmake -D CMAKE_TOOLCHAIN_FILE=../tools/cmake/catalyst.toolchain.cmake \\
-                                  -D CMAKE_BUILD_TYPE=${buildType} \\
-                                  -D REALM_VERSION=${gitDescribeVersion} \\
-                                  -D REALM_SKIP_SHARED_LIB=ON \\
-                                  -D REALM_BUILD_LIB_ONLY=ON \\
-                                  -G Ninja ..
-                        """
+                    retry(3) {
+                        timeout(time: 2, unit: 'MINUTES') {
+                            sh """
+                                    rm -rf *
+                                    cmake -D CMAKE_TOOLCHAIN_FILE=../tools/cmake/catalyst.toolchain.cmake \\
+                                          -D CMAKE_BUILD_TYPE=${buildType} \\
+                                          -D REALM_VERSION=${gitDescribeVersion} \\
+                                          -D REALM_SKIP_SHARED_LIB=ON \\
+                                          -D REALM_BUILD_LIB_ONLY=ON \\
+                                          -G Ninja ..
+                                """
+                        }
+                    }
                     runAndCollectWarnings(parser: 'clang', script: 'ninja package')
                 }
             }
