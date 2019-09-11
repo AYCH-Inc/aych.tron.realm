@@ -735,7 +735,7 @@ Table* Group::do_add_table(StringData name, bool require_unique_name)
 
     // find first empty spot:
     // FIXME: Optimize with rowing ptr or free list of some sort
-    size_t j;
+    uint32_t j;
     RefOrTagged rot = RefOrTagged::make_tagged(0);
     for (j = 0; j < m_tables.size(); ++j) {
         rot = m_tables.get_as_ref_or_tagged(j);
@@ -743,7 +743,7 @@ Table* Group::do_add_table(StringData name, bool require_unique_name)
             break;
     }
     bool gen_null_tag = (j == m_tables.size()); // new tags start at zero
-    uint64_t tag = gen_null_tag ? 0 : rot.get_as_int();
+    uint32_t tag = gen_null_tag ? 0 : uint32_t(rot.get_as_int());
     TableKey key = TableKey((tag << 16) | j);
     create_and_insert_table(key, name);
     Table* table = create_table_accessor(j);
