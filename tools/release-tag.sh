@@ -14,4 +14,4 @@ project_dir=$(git rev-parse --show-toplevel)
 realm_version=$(grep VERSION "${project_dir}/dependencies.list" | cut -f 2 -d=)
 tag=v${realm_version}
 git tag -m \""$1"\" "${tag}"
-git push origin "${tag}"
+# git push origin "${tag}"

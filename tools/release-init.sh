@@ -13,9 +13,9 @@ fi
 
 project_dir=$(git rev-parse --show-toplevel)
 
-git branch release/${realm_version}
-git push -u origin release/${realm_version}
-git checkout -b prepare-$realm_version
+git checkout -b release/${realm_version}
+# git push -u origin release/${realm_version}
+# git checkout -b prepare-$realm_version
 
 # update dependencies.list
 sed -i.bak -e "s/^VERSION.*/VERSION=${realm_version}/" "${project_dir}/dependencies.list"
